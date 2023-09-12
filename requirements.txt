@@ -3,3 +3,4 @@ pandas
 python-dotenv
 psycopg2
 streamlit
+plotly-express

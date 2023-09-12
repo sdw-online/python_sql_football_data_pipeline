@@ -201,11 +201,28 @@ postgres_connection.commit()
 
 
 
-# Use SQL to update the table rankings
-
-update_rankings_sql_query = """
-
-
-
-
+# Use SQL to create a view that updates the table rankings
+create_ranked_standings_view_sql_query = """
+    CREATE OR REPLACE VIEW public.premier_league_standings_vw AS 
+        SELECT 
+            RANK() OVER (ORDER BY points DESC, goal_difference DESC, goals_for DESC) as position
+            ,team
+            ,games_played
+            ,wins
+            ,draws
+            ,losses
+            ,goals_for
+            ,goals_against
+            ,goal_difference
+            ,points
+        FROM 
+            public.premier_league_standings_tbl;
 """
+
+
+# Run the SQL query 
+cur.execute(create_ranked_standings_view_sql_query)
+
+
+# Commit the transaction 
+postgres_connection.commit()
